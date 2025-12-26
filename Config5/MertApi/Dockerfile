@@ -13,17 +13,17 @@ ENV ASPNETCORE_URLS=http://+:80
 EXPOSE 80
 EXPOSE 2222
 
-# Install OpenSSH and configure (Temporarily disabled for debugging)
-# RUN apt-get update \
-#     && apt-get install -y --no-install-recommends openssh-server \
-#     && echo "root:Docker!" | chpasswd \
-#     && chmod 755 /app
+# Install OpenSSH and configure
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends openssh-server \
+    && echo "root:Docker!" | chpasswd \
+    && chmod 755 /app
 
-# COPY Config5/MertApi/sshd_config /etc/ssh/
+COPY Config5/MertApi/sshd_config /etc/ssh/
 
 COPY --from=build /app/publish .
 
 COPY Config5/MertApi/entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
 
-ENTRYPOINT ["dotnet", "MertApi.dll"]
+ENTRYPOINT ["/app/entrypoint.sh"]

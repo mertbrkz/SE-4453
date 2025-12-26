@@ -1,6 +1,10 @@
 #!/bin/sh
 set -e
 
-# Simplified Entrypoint to debug 503
+# Start SSH (Azure App Service requirement)
+mkdir -p /run/sshd
+/usr/sbin/sshd
+
+# Start App
 echo "Starting Application..."
 dotnet MertApi.dll
