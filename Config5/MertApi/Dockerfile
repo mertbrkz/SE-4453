@@ -9,7 +9,8 @@ RUN dotnet publish "MertApi.csproj" -c Release -o /app/publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
-EXPOSE 8080
+ENV ASPNETCORE_URLS=http://+:80
+EXPOSE 80
 EXPOSE 2222
 
 # Install OpenSSH and configure (Temporarily disabled for debugging)
