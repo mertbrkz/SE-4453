@@ -1,9 +1,9 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY ["MertApi.csproj", "./"]
-RUN dotnet restore "MertApi.csproj"
+COPY ["Config5/MertApi/MertApi.csproj", "Config5/MertApi/"]
+RUN dotnet restore "Config5/MertApi/MertApi.csproj"
 COPY . .
-WORKDIR "/src/."
+WORKDIR "/src/Config5/MertApi"
 RUN dotnet build "MertApi.csproj" -c Release -o /app/build
 RUN dotnet publish "MertApi.csproj" -c Release -o /app/publish
 
@@ -18,11 +18,11 @@ RUN apt-get update \
     && echo "root:Docker!" | chpasswd \
     && chmod 755 /app
 
-COPY sshd_config /etc/ssh/
+COPY Config5/MertApi/sshd_config /etc/ssh/
 
 COPY --from=build /app/publish .
 
-COPY entrypoint.sh /app/entrypoint.sh
+COPY Config5/MertApi/entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
 
 ENTRYPOINT ["/app/entrypoint.sh"]
