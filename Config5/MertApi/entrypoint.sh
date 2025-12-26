@@ -1,9 +1,6 @@
 #!/bin/sh
 set -e
 
-# Start SSH
-mkdir -p /run/sshd
-/usr/sbin/sshd
-
-# Start App
+# Simplified Entrypoint to debug 503
+echo "Starting Application..."
 dotnet MertApi.dll
