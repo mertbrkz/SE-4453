@@ -1,9 +1,9 @@
-# Ensure LF
 #!/bin/sh
 set -e
 
-# Start SSH service
-service ssh start
+# Start SSH
+mkdir -p /run/sshd
+/usr/sbin/sshd
 
-# Start the application
+# Start App
 dotnet MertApi.dll
