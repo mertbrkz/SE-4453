@@ -1,0 +1,41 @@
+name: Deploy to Azure App Service Container
+
+on:
+  push:
+    branches:
+      - feature/docker-integration
+      - main
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout GitHub Actions
+        uses: actions/checkout@v4
+
+      - name: 'Login via Azure CLI'
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: 'Build and push image'
+        uses: azure/docker-login@v1
+        with:
+          login-server: mertbrkzacr.azurecr.io
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+      
+      - run: |
+          docker build . -t mertbrkzacr.azurecr.io/mertapi:${{ github.sha }} -t mertbrkzacr.azurecr.io/mertapi:latest -f Config5/MertApi/Dockerfile
+          docker push mertbrkzacr.azurecr.io/mertapi:${{ github.sha }}
+          docker push mertbrkzacr.azurecr.io/mertapi:latest
+
+      - name: 'Deploy to Azure Web App'
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'mertbrkz-config5-app'
+          images: 'mertbrkzacr.azurecr.io/mertapi:${{ github.sha }}'
