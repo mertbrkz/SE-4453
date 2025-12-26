@@ -7,12 +7,20 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Configure KeyVault
-// var keyVaultName = builder.Configuration["KeyVaultName"];
-// if (!string.IsNullOrEmpty(keyVaultName))
-// {
-//     var keyVaultUri = new Uri($"https://{keyVaultName}.vault.azure.net/");
-//     builder.Configuration.AddAzureKeyVault(keyVaultUri, new DefaultAzureCredential());
-// }
+var keyVaultName = builder.Configuration["KeyVaultName"];
+if (!string.IsNullOrEmpty(keyVaultName))
+{
+    try
+    {
+        var keyVaultUri = new Uri($"https://{keyVaultName}.vault.azure.net/");
+        builder.Configuration.AddAzureKeyVault(keyVaultUri, new DefaultAzureCredential());
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"KeyVault access failed: {ex.Message}");
+        // Continuing without KeyVault to avoid 503 Crash
+    }
+}
 
 var app = builder.Build();
 
