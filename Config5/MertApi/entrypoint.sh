@@ -1,9 +1,6 @@
-# Ensure LF
 #!/bin/sh
 set -e
 
-# Start SSH service
-service ssh start
-
-# Start the application
+# Simplified Entrypoint to debug 503
+echo "Starting Application..."
 dotnet MertApi.dll
