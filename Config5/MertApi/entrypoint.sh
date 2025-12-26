@@ -1,3 +1,4 @@
+# Ensure LF
 #!/bin/sh
 set -e
 
