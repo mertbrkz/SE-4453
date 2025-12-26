@@ -14,6 +14,7 @@ if (!string.IsNullOrEmpty(keyVaultName))
     {
         var keyVaultUri = new Uri($"https://{keyVaultName}.vault.azure.net/");
         builder.Configuration.AddAzureKeyVault(keyVaultUri, new DefaultAzureCredential());
+        Console.WriteLine($"Successfully configured KeyVault: {keyVaultName}");
     }
     catch (Exception ex)
     {
